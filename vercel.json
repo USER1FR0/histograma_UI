@@ -1,5 +1,5 @@
 {
-  "buildCommand": "uv pip install matplotlib numpy pillow --system && python build.py",
+  "buildCommand": "uv run --with matplotlib --with numpy --with pillow python build.py",
   "outputDirectory": "public",
   "framework": null
 }
