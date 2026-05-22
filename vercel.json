@@ -1,14 +1,6 @@
 {
-  "builds": [
-    {
-      "src": "app.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "app.py"
-    }
-  ]
+  "buildCommand": "python build.py",
+  "outputDirectory": "public",
+  "framework": null,
+  "installCommand": "pip install matplotlib numpy pillow"
 }

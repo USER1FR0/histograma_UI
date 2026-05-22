@@ -1,6 +1,7 @@
 # ==========================================================
-# build.py — se ejecuta UNA VEZ en el build de Vercel
-# Genera public/histograma.gif con toda la animacion
+# build.py
+# Genera public/histograma.gif + public/index.html
+# Se ejecuta durante el build de Vercel
 # ==========================================================
 import matplotlib
 matplotlib.use('Agg')
@@ -361,12 +362,75 @@ fig.text(
 plt.tight_layout(rect=[0,0.05,1,0.95])
 
 # ==========================================================
-# GUARDAR GIF EN public/
+# GUARDAR GIF
 # ==========================================================
 os.makedirs('public', exist_ok=True)
 
+print("Generando GIF...")
 ani.save('public/histograma.gif', writer='pillow', fps=2.5)
-
 plt.close(fig)
+print(f"GIF listo: {os.path.getsize('public/histograma.gif') / 1024 / 1024:.2f} MB")
 
-print("build.py: GIF generado en public/histograma.gif")
+# ==========================================================
+# GENERAR index.html
+# ==========================================================
+html = """<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histogramas Estadisticos Futuristas</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #030712;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            padding: 2rem 1rem;
+        }
+        h1 {
+            font-size: clamp(1.1rem, 3vw, 1.9rem);
+            color: #00E5FF;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px #00E5FF88;
+        }
+        .gif-container {
+            border: 2px solid #00E5FF44;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 0 40px #00E5FF22;
+            max-width: 98vw;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+        p {
+            margin-top: 1rem;
+            color: #00E5FF99;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Histogramas Estadisticos Futuristas</h1>
+    <div class="gif-container">
+        <img src="histograma.gif" alt="Histogramas animados futuristas">
+    </div>
+    <p>Frecuencia Absoluta &bull; Frecuencia Relativa &bull; Porcentajes &bull; Intervalos de Clase</p>
+</body>
+</html>"""
+
+with open('public/index.html', 'w', encoding='utf-8') as f:
+    f.write(html)
+
+print("index.html listo")
+print("Build completo.")
